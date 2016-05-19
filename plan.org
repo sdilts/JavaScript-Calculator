@@ -1,0 +1,32 @@
+This file lays out the planned structure of this program
+
+* Overview:
+  + create a caclulator that is capable of reducing algebraic
+    equations.
+  + Secondary goal: solve equations by isolating one value:
+    - e.g :: y + x = 5
+      + y = 5 - x
+  + This will be accomplished by converting the equations into trees, and
+    then manipulating the trees so the equations can be reduced.
+** Tokenizer:
+   + converts the input into tokens so that they can be processed for
+     order of operations
+   + Converts equations such as 5(2 + 4) into 5 * (2 + 4)
+   + Converts numbers and symbols into their mathmatical
+     representation rather than a string representation
+     ("pi" vs Math.PI)
+   + Performs some pre-processing to the tokens to make reducing
+     easier (i.e converts subtraction into adding by negative numbers)
+** Parser
+   + converts the tokens into the syntax tree with the shunting yard
+     algorithm
+   + Although some tokens are expected to be processed out of the
+     equation, this step should be able to handle any operator with
+     little modification.
+** Reducer
+   + reduces the syntax tree to its most symple form
+   + This is accomplished using some symbolic computing techniques:
+     some tokens will not be processed until an exact representation
+     is known.
+** Output processing
+   + Converts the reduced tree into a human-readable format
