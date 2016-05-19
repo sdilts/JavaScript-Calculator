@@ -11,10 +11,66 @@
 	this.next = null;
     }
 
-    var LinkedList = function() {
+    calculator.LinkedList = function() {
 	this.head = null;
 	this.tail = null;
+	this.size = 0;
     }
 
+    calculator.LinkedList.prototype.addFirst = function(data) {
+	var newNode = new Node(data);
+	if(this.head === null) {
+	    //list is empty:
+	    this.head = newNode;
+	    this.tail = newNode;
+	} else {
+	    newNode.next = this.head;
+	    this.head = newNode;
+	}
+	this.size++;
+    }
+    
+    calculator.LinkedList.prototype.removeFirst = function() {
+	var data = null;
+	if(this.size !== 0) {
+	    data = this.head.data;
+	    this.head = this.head.next;
+	    this.size--;
+	    if(this.size === 0) {
+		this.tail = null;
+	    }
+	}
+	return data;
+    }
 
-} (window.calculator = calculator.tokenizer || {})
+    calculator.LinkedList.prototype.print = function() {
+	var node = this.head
+	var output = "";
+	while(node !== null) {
+	    output += " " + node.data;
+	    node = node.next;
+	}
+	//console.log(output);
+	return output;
+    }
+
+    calculator.LinkedList.prototype.addLast = function(data) {
+	var newNode = new Node(data);
+	if(this.size == 0) {
+	    this.head = newNode;
+	    this.tail.newNode;
+	} else {
+	    this.tail.next = newNode;
+	    this.tail = newNode;
+	}
+	size++;
+    }
+
+    //add definitions for stack/queue usage:
+    calculator.LinkedList.prototype.push = calculator.LinkedList.addFirst;
+    calculator.LinkedList.prototype.pop = calculator.LinkedList.removeFirst;
+
+    calculator.LinkedList.prototype.add = calculator.LinkedList.addLast;
+    calculator.LinkedList.prototype.remove = calculator.LinkedList.removeFirst;
+
+} (window.calculator = window.calculator || {}))

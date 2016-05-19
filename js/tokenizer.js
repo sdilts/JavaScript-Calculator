@@ -17,7 +17,7 @@
 
 	//code goes in here
 
-    }(calculator.tokenizer = calculator.tokenizer || {})
+    }(calculator.tokenizer = calculator.tokenizer || {}))
 
 
-} (window.calculator = window.tokenizer || {})
+} (window.calculator = window.calculator || {}))
