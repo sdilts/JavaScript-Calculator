@@ -5,6 +5,28 @@
 
 //use a namespace for all caclulator functions:
 (function (calculator, undefined) {
+
+    /**
+     * CAUTION: no one-letter functions are allowed in the
+     * table. Several methods rely on this fact, and if they do exist,
+     * they will break the system.
+     **/
+    functions = new Object();
+    functions["+"] = function(x, y) {return x + y;}
+    functions["-"] = function(x, y) {return x - y;}
+    functions["*"] = function(x, y) {return x * y;}
+    functions["/"] = function(x, y) {return x / y;}
+    functions["%"] = function(x, y) {return x % y;}
+    functions["^"] = Math.pow;
+
+
+    var typeEnum = {
+	SEPARATOR: 6, //includes commas
+	FUNCTION: 5, 
+	NUMBER: 4,
+	OPERATOR: 3, //three different precidences
+    }
+
     //node constructor:
     var Node = function(data) {
 	this.data = data;
@@ -29,6 +51,19 @@
 	}
 	this.size++;
     }
+
+    calculator.LinkedList.prototype.addLast = function(data) {
+	var newNode = new Node(data);
+	if(this.size == 0) {
+	    this.head = newNode;
+	    this.tail = newNode;
+	} else {
+	    this.tail.next = newNode;
+	    this.tail = newNode;
+	}
+	this.size++;
+    }
+
     
     calculator.LinkedList.prototype.removeFirst = function() {
 	var data = null;
@@ -54,23 +89,11 @@
 	return output;
     }
 
-    calculator.LinkedList.prototype.addLast = function(data) {
-	var newNode = new Node(data);
-	if(this.size == 0) {
-	    this.head = newNode;
-	    this.tail.newNode;
-	} else {
-	    this.tail.next = newNode;
-	    this.tail = newNode;
-	}
-	size++;
-    }
-
     //add definitions for stack/queue usage:
-    calculator.LinkedList.prototype.push = calculator.LinkedList.addFirst;
-    calculator.LinkedList.prototype.pop = calculator.LinkedList.removeFirst;
+    calculator.LinkedList.prototype.push = calculator.LinkedList.prototype.addFirst;
+    calculator.LinkedList.prototype.pop = calculator.LinkedList.prototype.removeFirst;
 
-    calculator.LinkedList.prototype.add = calculator.LinkedList.addLast;
-    calculator.LinkedList.prototype.remove = calculator.LinkedList.removeFirst;
+    calculator.LinkedList.prototype.add = calculator.LinkedList.prototype.addLast;
+    calculator.LinkedList.prototype.remove = calculator.LinkedList.prototype.removeFirst;
 
 } (window.calculator = window.calculator || {}))
