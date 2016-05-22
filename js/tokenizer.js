@@ -68,7 +68,8 @@
 	var determineProcess = function(output) {
 	    if(output.tail !== null &&
 	       (!isNaN(output.tail.data) ||
-		isConstant(output.tail.data))) {
+		isConstant(output.tail.data) ||
+		output.tail.data === ")")) {
 		output.add("*");
 	    }
 	}
@@ -86,7 +87,7 @@
 		while(searchIndex < input.length &&
 		      isLetter(input.charAt(searchIndex))) {
 		    var token = input.substring(i, searchIndex);
-		    console.log(token);
+		    //console.log(token);
 		    if(isFunction(token) || isConstant(token)) {
 			determineProcess(output);
 			output.add(token);
@@ -117,6 +118,17 @@
 	    var index = 0;
 	    var searchIndex = 0;
 	    
+	    var checkNegative = function() {
+		if(searchIndex !== index) {
+		    console.log("Negative function");
+		    if(input.substring(index, searchIndex) === "-") {
+			output.add("-1");
+			output.add("*");
+			index++;
+		    } else throw "Something wrong around " + substring(index, searchIndex);
+		}
+	    }
+	    
 	    //remove whitespace:
 	    input = input.replace(/\s/g, "");
 	    
@@ -126,7 +138,9 @@
 		//will tell us if it is an operator:
 		if(isFunction(character)) {
 		    if(character == "-") {
-			if(index !== 0 && !isFunction(output.tail.data)) {
+			//is it arithmetic or a negative number?
+			if(index !== 0 && !isFunction(output.tail.data) &&
+			  output.tail.data !== "(") {
 			    output.add("+");
 			}
 			searchIndex++
@@ -145,16 +159,22 @@
 		    output.add(input.substring(index, searchIndex));
 		    index = searchIndex;
 		} else if(isLetter(character)) {
-		    if(searchIndex !== index) {
-			console.log("Negative function");
-			if(input.substring(index, searchIndex) === "-") {
-			    output.add("-1");
-			    output.add("*");
-			    index++;
-			} else throw "Something wrong around " + substring(index, searchIndex);
-		    }
+		    checkNegative();
+		    //get the whole chunk of letters and process them:
 		    searchIndex = getChunk(index, input, output);
 		    index = searchIndex;
+		} else if(character === "(") {
+		    checkNegative();
+		    if((output.size != 0 && isNumber(output.tail.data)) || output.tail.data === ")") {
+			output.add("*");
+		    }
+		    output.add(character);
+		    index++
+		    searchIndex++;
+		} else if(character === ")") {
+		    output.add(character);
+		    index++;
+		    searchIndex++;
 		} else throw "Unkown token: " + character;
 		    
 	    }
