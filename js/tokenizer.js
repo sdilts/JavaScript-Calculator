@@ -17,7 +17,7 @@
 
     //create namespace for the tokenizer:
     (function (tokenizer, undefined) {
-
+	"use strict";
 
 	var getType = function(item) {
 	    switch(item) {
@@ -44,6 +44,10 @@
 	    return functions[character] !== undefined;
 	}
 
+	var isConstant = function(token) {
+	    return constants[token] !== undefined;
+	}
+
 	/**
 	 * A "." is not considered a number when the second argument
 	 * is true
@@ -61,9 +65,13 @@
 	}
 
 
-	// var determineProcess = function(output) {
-	//     if(getType(output.tail.data) === typeEnum.
-	// }
+	var determineProcess = function(output) {
+	    if(output.tail !== null &&
+	       (!isNaN(output.tail.data) ||
+		isConstant(output.tail.data))) {
+		output.add("*");
+	    }
+	}
 
 
 	/**
@@ -73,13 +81,15 @@
 	    var i;
 	    for(i = index; i < input.length &&
 		isLetter(input.charAt(i)); i++) {
-		var searchIndex = i + 1;
+		let searchIndex = i + 1;
 		var found = false;
 		while(searchIndex < input.length &&
 		      isLetter(input.charAt(searchIndex))) {
-		    console.log(input.substring(i, searchIndex));
-		    if(isFunction(input.substring(i, searchIndex))) {
-			output.add(input.substring(i, searchIndex));
+		    var token = input.substring(i, searchIndex);
+		    console.log(token);
+		    if(isFunction(token) || isConstant(token)) {
+			determineProcess(output);
+			output.add(token);
 			found = true;
 			i = searchIndex -1;
 			break;
@@ -87,8 +97,10 @@
 			searchIndex++;
 		    }
 		}
-		if(isFunction(input.substring(i, searchIndex))) {
-		    output.add(input.substring(i, searchIndex));
+		var token = input.substring(i, searchIndex);
+		if(!found && (isFunction(token) || isConstant(token))) {
+		    determineProcess(output);
+		    output.add(token);
 		    i = searchIndex -1;
 		    //found = true;
 		} else if(!found) {
@@ -103,24 +115,29 @@
 	    //linked list to hold tokens:
 	    var output = new calculator.LinkedList();
 	    var index = 0;
+	    var searchIndex = 0;
 	    
 	    //remove whitespace:
 	    input = input.replace(/\s/g, "");
 	    
-	    while(index < input.length) {
-		var character = input.charAt(index);
+	    while(searchIndex < input.length) {
+		var character = input.charAt(searchIndex);
 		//operators are stored in the function array, so this
 		//will tell us if it is an operator:
 		if(isFunction(character)) {
-		    /* stuff for later on:
-		       if(character == "-" && index != 0) {
-		       output.add("+");
-		       index++
-		    */
-		    output.add(character);
-		    index++;
-		} else if(isNumber(character, true)) {
-		    var searchIndex = index + 1;
+		    if(character == "-") {
+			if(index !== 0 && !isFunction(output.tail.data)) {
+			    output.add("+");
+			}
+			searchIndex++
+		    } else {
+			output.add(character);
+			index++;
+			searchIndex++;
+		    }
+		} else if(isNumber(character)) {
+		    determineProcess(output);
+		    searchIndex += 1;
 		    while(searchIndex < input.length &&
 			  isNumber(input.charAt(searchIndex))) {
 			searchIndex++;
@@ -128,8 +145,17 @@
 		    output.add(input.substring(index, searchIndex));
 		    index = searchIndex;
 		} else if(isLetter(character)) {
-		    index = getChunk(index, input, output);
-		}
+		    if(searchIndex !== index) {
+			console.log("Negative function");
+			if(input.substring(index, searchIndex) === "-") {
+			    output.add("-1");
+			    output.add("*");
+			    index++;
+			} else throw "Something wrong around " + substring(index, searchIndex);
+		    }
+		    searchIndex = getChunk(index, input, output);
+		    index = searchIndex;
+		} else throw "Unkown token: " + character;
 		    
 	    }
 	    return output;

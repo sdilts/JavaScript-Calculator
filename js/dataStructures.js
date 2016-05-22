@@ -21,9 +21,14 @@
     functions["cos"] = Math.cos;
     functions["sin"] = Math.sin;
     functions["tan"] = Math.tan;
+    
+    constants = new Object();
+    constants["e"] = Math.E;
+    constants["pi"] = Math.PI;
 
 
     var typeEnum = {
+	UNKNOWN: 7,
 	SEPARATOR: 6, //includes commas
 	FUNCTION: 5, 
 	NUMBER: 4,
