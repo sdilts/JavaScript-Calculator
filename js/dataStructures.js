@@ -18,6 +18,9 @@
     functions["/"] = function(x, y) {return x / y;}
     functions["%"] = function(x, y) {return x % y;}
     functions["^"] = Math.pow;
+    functions["cos"] = Math.cos;
+    functions["sin"] = Math.sin;
+    functions["tan"] = Math.tan;
 
 
     var typeEnum = {

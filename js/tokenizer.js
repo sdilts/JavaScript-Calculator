@@ -19,6 +19,27 @@
     (function (tokenizer, undefined) {
 
 
+	var getType = function(item) {
+	    switch(item) {
+	    case "+":
+	    case "-":
+	    case "*":
+	    case "/":
+	    case "%":
+	    case "^":
+		return typeEnum.OPERATOR;
+	    default:
+		if(isFunction(item)) {
+		    return typeEnum.FUNCTION;
+		} else if(!isNaN(item)) {
+		    return typeEnum.NUMBER;
+		} else if(character === ")" || character === "(") {
+		    return typeEnum.SEPARATOR;
+		} else return typeEnum.UNKNOWN;	  
+	    }
+	}
+
+
 	var isFunction = function(character) {
 	    return functions[character] !== undefined;
 	}
@@ -34,10 +55,49 @@
 	}
 
 	//fails when input is more than one char long:
-	var isLetter = function(character) {
+	var isLetter = function(c) {
 	    //thanks, stack overflow
 	    return c.toLowerCase() != c.toUpperCase();
 	}
+
+
+	// var determineProcess = function(output) {
+	//     if(getType(output.tail.data) === typeEnum.
+	// }
+
+
+	/**
+	 * Function that interprets characters and adds the necessary "-" and "*" characters.
+	 **/
+	var getChunk = function(index, input, output) {
+	    var i;
+	    for(i = index; i < input.length &&
+		isLetter(input.charAt(i)); i++) {
+		var searchIndex = i + 1;
+		var found = false;
+		while(searchIndex < input.length &&
+		      isLetter(input.charAt(searchIndex))) {
+		    console.log(input.substring(i, searchIndex));
+		    if(isFunction(input.substring(i, searchIndex))) {
+			output.add(input.substring(i, searchIndex));
+			found = true;
+			i = searchIndex -1;
+			break;
+		    } else {
+			searchIndex++;
+		    }
+		}
+		if(isFunction(input.substring(i, searchIndex))) {
+		    output.add(input.substring(i, searchIndex));
+		    i = searchIndex -1;
+		    //found = true;
+		} else if(!found) {
+		    output.add(input.charAt(i));
+		}
+	    }
+	    return i;
+	}
+
 
 	tokenizer.tokenize = function(input) {
 	    //linked list to hold tokens:
@@ -66,8 +126,11 @@
 			searchIndex++;
 		    }
 		    output.add(input.substring(index, searchIndex));
-		    index += searchIndex;
+		    index = searchIndex;
+		} else if(isLetter(character)) {
+		    index = getChunk(index, input, output);
 		}
+		    
 	    }
 	    return output;
 	}
