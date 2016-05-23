@@ -19,26 +19,25 @@
     (function (tokenizer, undefined) {
 	"use strict";
 
-	var getType = function(item) {
-	    switch(item) {
-	    case "+":
-	    case "-":
-	    case "*":
-	    case "/":
-	    case "%":
-	    case "^":
-		return typeEnum.OPERATOR;
-	    default:
-		if(isFunction(item)) {
-		    return typeEnum.FUNCTION;
-		} else if(!isNaN(item)) {
-		    return typeEnum.NUMBER;
-		} else if(character === ")" || character === "(") {
-		    return typeEnum.SEPARATOR;
-		} else return typeEnum.UNKNOWN;	  
-	    }
-	}
-
+	// var getType = function(item) {
+	//     switch(item) {
+	//     case "+":
+	//     case "-":
+	//     case "*":
+	//     case "/":
+	//     case "%":
+	//     case "^":
+	// 	return typeEnum.OPERATOR;
+	//     default:
+	// 	if(isFunction(item)) {
+	// 	    return typeEnum.FUNCTION;
+	// 	} else if(!isNaN(item)) {
+	// 	    return typeEnum.NUMBER;
+	// 	} else if(character === ")" || character === "(") {
+	// 	    return typeEnum.SEPARATOR;
+	// 	} else return typeEnum.UNKNOWN;	  
+	//     }
+	// }
 
 	var isFunction = function(character) {
 	    return functions[character] !== undefined;
@@ -66,8 +65,10 @@
 
 
 	var determineProcess = function(output) {
+	    //can this be cleaned at all?
 	    if(output.tail !== null &&
 	       (!isNaN(output.tail.data) ||
+		!isFunction(output.tail.data) ||
 		isConstant(output.tail.data) ||
 		output.tail.data === ")")) {
 		output.add("*");
@@ -78,6 +79,8 @@
 	/**
 	 * Function that interprets characters and adds the necessary "-" and "*" characters.
 	 **/
+	//isolate just the function grabing portion and leave what part of the string
+	//is processed to another function?
 	var getChunk = function(index, input, output) {
 	    var i;
 	    for(i = index; i < input.length &&
@@ -105,13 +108,14 @@
 		    i = searchIndex -1;
 		    //found = true;
 		} else if(!found) {
+		    determineProcess(output);
 		    output.add(input.charAt(i));
 		}
 	    }
 	    return i;
 	}
 
-
+	
 	tokenizer.tokenize = function(input) {
 	    //linked list to hold tokens:
 	    var output = new calculator.LinkedList();
@@ -151,6 +155,8 @@
 		    }
 		} else if(isNumber(character)) {
 		    determineProcess(output);
+		    //grab the entire number:
+		    //move into its own function?
 		    searchIndex += 1;
 		    while(searchIndex < input.length &&
 			  isNumber(input.charAt(searchIndex))) {
@@ -171,7 +177,7 @@
 		    output.add(character);
 		    index++
 		    searchIndex++;
-		} else if(character === ")") {
+		} else if(character === ")") { //add to another case?
 		    output.add(character);
 		    index++;
 		    searchIndex++;
