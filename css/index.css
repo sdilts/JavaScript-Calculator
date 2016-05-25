@@ -1,0 +1,16 @@
+#equationDiv {
+    margin: 50px auto;
+    width: 80%;
+}
+h1 {
+    font-size: 30pt
+}
+#divTable {
+    width: 80%;
+    margin: auto;
+    height: 120px;
+
+}
+#divTable table {
+    float: left;    
+}

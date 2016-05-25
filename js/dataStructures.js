@@ -21,6 +21,7 @@
     functions["cos"] = Math.cos;
     functions["sin"] = Math.sin;
     functions["tan"] = Math.tan;
+    functions["sqrt"] = Math.sqrt;
     
     constants = new Object();
     constants["e"] = Math.E;

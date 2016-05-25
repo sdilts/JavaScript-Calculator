@@ -3,6 +3,7 @@
 
   <head>
     <link rel="stylesheet" type="text/css" href="css/global.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Yet Another Online Calculator</title>
     <script type="text/javascript"> 
       function computeInput() {
@@ -18,25 +19,68 @@
 
   
   <body>
-    <h1>Yet Another Online Calculator</h1>
-    <form id="calcForm" onSubmit="return computeInput()">
-      <h2>What do you wish to calculate?</h2>
-      <input id="equationInput" type="text" value="5 + 7 * 4">
-      <input type="submit" value="Calculate">
-    </form>
+    <div id="content">
+      <h1>Yet Another Online Calculator</h1>
+      <div id="equationDiv">
+	<form onSubmit="return computeInput()">
+	  <h2>What do you wish to calculate?</h2>
+	  <input id="equationInput" type="text" value="5 + 7 * 4">
+	  <input type="submit" id="submitButton" value="Calculate">
+	</form>
+      </div>
 
-    <p>
-      Note: this calculator is under construction and will not work
-      for all inputs. Inputs that are not expected to work should be
-      metioned below. If you find an input that doesn't work and is not
-      listed below, please submit a bug report on
-      <a href="https://github.com/sdilts/JavaScript-Calculator/issues">GitHub</a>.
-    </p>
+      <div id="divTable">
+	<table id="rightTable">
+	  <tr>
+	    <td>Function</td><td>Explanation</td>
+	  </tr>
+	  <tr>
+	    <td>cos(&theta;) </td><td><i>answer in radians</i></td>
+	  </tr>
+	  <tr>
+	    <td>sin(&theta;)</td><td>""</td>
+	  </tr>
+	  <tr>
+	    <td>tan(&theta;)</td><td>""</td>
+	  </tr>
+	  <tr>
+	    <td>sqrt(<i>x</i>)</td><td>square root of a number</td>
+	  </tr>
+	</table>
+	
+	<table id="leftTable">
+	  <tr>
+	    <td>&nbsp; </td> <td> </td>	    
+	  <tr>
+	    <td>arccos(&theta;)</td><td><i>answer in radians</i></td>
+	  </tr>
+	  <tr>
+	    <td>arcsin(&theta;)</td><td>""</td>
+	  </tr>
+	  <tr>
+	    <td>arctan(&theta;)</td><td>""</td>
+	  </tr>
+	</table>
+      </div>
 
-    <!-- Scripts for the main part of the calculator: -->
-    <script src="./js/dataStructures.js"></script>
-    <script src="./js/tokenizer.js"></script>
-    <!-- should this be moved to the top? -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+      <p>
+	Note: this calculator is under construction and will not work
+	for all inputs. Inputs that are not expected to work should be
+	mentioned below. If you find an input that doesn't work and is not
+	listed below, please submit a bug report on
+	<a href="https://github.com/sdilts/JavaScript-Calculator/issues">GitHub</a>.
+      </p>
+      <ul>
+	<li>Nothing should work. The tokenizer is implemented but not
+	  hooked up to anything.</li>
+      </ul>
+      
+      
+      <!-- Scripts for the main part of the calculator: -->
+      <script src="./js/dataStructures.js"></script>
+      <script src="./js/tokenizer.js"></script>
+      <!-- should this be moved to the top? -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    </div>
   </body>
 </html>
