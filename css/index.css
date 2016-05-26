@@ -1,16 +1,40 @@
+h1 {
+    font-size: 30pt;
+}
+
 #equationDiv {
     margin: 50px auto;
     width: 80%;
 }
-h1 {
-    font-size: 30pt
+input {
+    font-size: 12pt;
+    padding: .5ex;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th {
+    border-bottom: 1px solid black;
 }
 #divTable {
     width: 80%;
     margin: auto;
-    height: 120px;
+    height: 170px;
 
 }
+#divTable h3 {
+    padding: 0;
+}
+
 #divTable table {
-    float: left;    
+    float: left;
+    margin-right: 10px;
+}
+
+table .leftItem {
+    width: 155px;
+    width: 100pt;
+    text-align: right
 }
