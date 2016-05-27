@@ -67,8 +67,8 @@
 	var determineProcess = function(output) {
 	    //can this be cleaned at all?
 	    if(output.tail !== null &&
+	       !isFunction(output.tail.data) &&	       
 	       (!isNaN(output.tail.data) ||
-		!isFunction(output.tail.data) ||
 		isConstant(output.tail.data) ||
 		output.tail.data === ")")) {
 		output.add("*");
