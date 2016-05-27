@@ -14,10 +14,10 @@
 
 //use calc namespace:
 (function (calculator, undefined) {
+    "use strict";
 
     //create namespace for the tokenizer:
     (function (tokenizer, undefined) {
-	"use strict";
 
 	// var getType = function(item) {
 	//     switch(item) {
@@ -41,11 +41,11 @@
 
 	var isFunction = function(character) {
 	    return functions[character] !== undefined;
-	}
+	};
 
 	var isConstant = function(token) {
 	    return constants[token] !== undefined;
-	}
+	};
 
 	/**
 	 * A "." is not considered a number when the second argument
@@ -55,13 +55,13 @@
 	    return (48 <= character.charCodeAt() &&
 		character.charCodeAt()  <= 57) ||
 		!first && character.charCodeAt() === 46;
-	}
+	};
 
 	//fails when input is more than one char long:
 	var isLetter = function(c) {
 	    //thanks, stack overflow
 	    return c.toLowerCase() != c.toUpperCase();
-	}
+	};
 
 
 	var determineProcess = function(output) {
@@ -73,7 +73,7 @@
 		output.tail.data === ")")) {
 		output.add("*");
 	    }
-	}
+	};
 
 
 	/**
@@ -86,10 +86,11 @@
 	    for(i = index; i < input.length &&
 		isLetter(input.charAt(i)); i++) {
 		let searchIndex = i + 1;
-		var found = false;
+		let found = false;
+		let token;
 		while(searchIndex < input.length &&
 		      isLetter(input.charAt(searchIndex))) {
-		    var token = input.substring(i, searchIndex);
+		    token = input.substring(i, searchIndex);
 		    //console.log(token);
 		    if(isFunction(token) || isConstant(token)) {
 			determineProcess(output);
@@ -97,11 +98,10 @@
 			found = true;
 			i = searchIndex -1;
 			break;
-		    } else {
-			searchIndex++;
 		    }
+		    searchIndex++;
 		}
-		var token = input.substring(i, searchIndex);
+		token = input.substring(i, searchIndex);
 		if(!found && (isFunction(token) || isConstant(token))) {
 		    determineProcess(output);
 		    output.add(token);
@@ -113,7 +113,7 @@
 		}
 	    }
 	    return i;
-	}
+	};
 
 	
 	tokenizer.tokenize = function(input) {
@@ -124,14 +124,14 @@
 	    
 	    var checkNegative = function() {
 		if(searchIndex !== index) {
-		    console.log("Negative function");
+		    //console.log("Negative function");
 		    if(input.substring(index, searchIndex) === "-") {
 			output.add("-1");
 			output.add("*");
 			index++;
 		    } else throw "Something wrong around " + substring(index, searchIndex);
 		}
-	    }
+	    };
 	    
 	    //remove whitespace:
 	    input = input.replace(/\s/g, "");
@@ -185,9 +185,9 @@
 		    
 	    }
 	    return output;
-	}
+	};
 		   
-    }(calculator.tokenizer = calculator.tokenizer || {}))
+    }(calculator.tokenizer = calculator.tokenizer || {}));
 
 
-} (window.calculator = window.calculator || {}))
+} (window.calculator = window.calculator || {}));
