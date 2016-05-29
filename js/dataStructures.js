@@ -28,7 +28,7 @@
     constants["pi"] = Math.PI;
 
 
-    var typeEnum = {
+    typeEnum = {
 	UNKNOWN: 7,
 	SEPARATOR: 6, //includes commas
 	FUNCTION: 5, 
@@ -97,6 +97,18 @@
 	//console.log(output);
 	return output;
     }
+    /**
+     * Returns the value that will be removed next
+     * This is possible because both the stack and the queue remove
+     * items from the head of the list:
+     **/
+    calculator.LinkedList.prototype.peek = function() {
+	if(this.head === null) {
+	    return null;
+	} else {
+	    return this.head.data;
+	}
+    }
 
     //add definitions for stack/queue usage:
     calculator.LinkedList.prototype.push = calculator.LinkedList.prototype.addFirst;
@@ -104,5 +116,18 @@
 
     calculator.LinkedList.prototype.add = calculator.LinkedList.prototype.addLast;
     calculator.LinkedList.prototype.remove = calculator.LinkedList.prototype.removeFirst;
+
+
+    /***************
+     * Functions needed globally:
+    ****************/
+    calculator.isFunction = function(character) {
+	return functions[character] !== undefined;
+    };
+
+    calculator.isConstant = function(token) {
+	return constants[token] !== undefined;
+    };
+
 
 } (window.calculator = window.calculator || {}))

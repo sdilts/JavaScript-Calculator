@@ -19,26 +19,6 @@
     //create namespace for the tokenizer:
     (function (tokenizer, undefined) {
 
-	// var getType = function(item) {
-	//     switch(item) {
-	//     case "+":
-	//     case "-":
-	//     case "*":
-	//     case "/":
-	//     case "%":
-	//     case "^":
-	// 	return typeEnum.OPERATOR;
-	//     default:
-	// 	if(isFunction(item)) {
-	// 	    return typeEnum.FUNCTION;
-	// 	} else if(!isNaN(item)) {
-	// 	    return typeEnum.NUMBER;
-	// 	} else if(character === ")" || character === "(") {
-	// 	    return typeEnum.SEPARATOR;
-	// 	} else return typeEnum.UNKNOWN;	  
-	//     }
-	// }
-
 	var isFunction = function(character) {
 	    return functions[character] !== undefined;
 	};
@@ -177,7 +157,7 @@
 		    output.add(character);
 		    index++
 		    searchIndex++;
-		} else if(character === ")") { //add to another case?
+		} else if(character === ")" || character === ",") { //add to another case?
 		    output.add(character);
 		    index++;
 		    searchIndex++;
