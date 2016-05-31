@@ -4,6 +4,12 @@
     //create namespace for the tokenizer:
     (function (ShuntingYard, undefined) {
 
+	/**
+	 * Defininition is confusing: checks to see if the token is
+	 * defined in the functions hashtable. Operators are
+	 * considered as functions in this case. use getType to
+	 * distinguish between functions and operators
+	 **/
 	var isFunction = function(character) {
 	    return functions[character] !== undefined;
 	};
@@ -72,7 +78,7 @@
 		    } else if(item === ")") {
 			if(popUntil("(")) {
 			    stack.pop();
-			    if(calculator.isFunction(stack.peek())) {
+			    if(getType(stack.peek()) === typeEnum.FUNCTION) {
 				queue.add(stack.pop());
 			    }
 			} else throw "Mismatched Parenthesis";
