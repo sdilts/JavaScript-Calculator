@@ -103,14 +103,14 @@
 		item = tokens.remove();
 	    } //end while
 	    
-	    if(getType(stack.peek()) === typeEnum.SEPARATOR) {
-		throw "Mismatched Parenthesis";
-	    } else {
-		while(stack.peek() !== null) {
+	    while(stack.peek() !== null) {
+		if(getType(stack.peek()) === typeEnum.SEPARATOR) {
+		    throw "Mismatched Parenthesis";
+		} else {
 		    queue.add(stack.pop());
 		}
-		return queue;
 	    }
+	    return queue;
 	    
 	}
 
