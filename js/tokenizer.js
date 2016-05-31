@@ -150,6 +150,7 @@
 		    searchIndex = getChunk(index, input, output);
 		    index = searchIndex;
 		} else if(character === "(") {
+		    determineProcess(output);
 		    checkNegative();
 		    if((output.size != 0 && isNumber(output.tail.data)) || output.tail.data === ")") {
 			output.add("*");
