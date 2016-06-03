@@ -50,6 +50,7 @@
 	       !isFunction(output.tail.data) &&	       
 	       (!isNaN(output.tail.data) ||
 		isConstant(output.tail.data) ||
+		isLetter(output.tail.data) ||
 		output.tail.data === ")")) {
 		output.add("*");
 	    }
@@ -72,9 +73,15 @@
 		      isLetter(input.charAt(searchIndex))) {
 		    token = input.substring(i, searchIndex);
 		    //console.log(token);
-		    if(isFunction(token) || isConstant(token)) {
+		    if(isFunction(token)) {
 			determineProcess(output);
 			output.add(token);
+			found = true;
+			i = searchIndex -1;
+			break;
+		    } else if(isConstant(token)) {
+			determineProcess(output);
+			output.add(constants[token]);
 			found = true;
 			i = searchIndex -1;
 			break;
@@ -82,9 +89,14 @@
 		    searchIndex++;
 		}
 		token = input.substring(i, searchIndex);
-		if(!found && (isFunction(token) || isConstant(token))) {
+		if(!found && (isFunction(token))) {
 		    determineProcess(output);
 		    output.add(token);
+		    i = searchIndex -1;
+		    //found = true;
+		} else if(isConstant(token)) {
+		    determineProcess(output);
+		    output.add(constants[token]);
 		    i = searchIndex -1;
 		    //found = true;
 		} else if(!found) {
@@ -142,7 +154,7 @@
 			  isNumber(input.charAt(searchIndex))) {
 			searchIndex++;
 		    }
-		    output.add(input.substring(index, searchIndex));
+		    output.add(Number(input.substring(index, searchIndex)));
 		    index = searchIndex;
 		} else if(isLetter(character)) {
 		    checkNegative();
