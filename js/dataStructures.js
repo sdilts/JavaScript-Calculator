@@ -9,19 +9,19 @@
     /**
      * CAUTION: no one-letter functions are allowed in the
      * table. Several methods rely on this fact, and if they do exist,
-     * they will break the system.
+     * they will break the system. Operators must be one char each.
      **/
     functions = new Object();
-    functions["+"] = function(x, y) {return x + y;}
-    functions["-"] = function(x, y) {return x - y;}
-    functions["*"] = function(x, y) {return x * y;}
-    functions["/"] = function(x, y) {return x / y;}
-    functions["%"] = function(x, y) {return x % y;}
-    functions["^"] = Math.pow;
-    functions["cos"] = Math.cos;
-    functions["sin"] = Math.sin;
-    functions["tan"] = Math.tan;
-    functions["sqrt"] = Math.sqrt;
+    functions["+"] = function(array, y) {return array[0] + array[1];}
+    functions["-"] = function(array, y) {return array[0] - array[1];}
+    functions["*"] = function(array, y) {return array[0] * array[1];}
+    functions["/"] = function(array, y) {return array[0] / array[1];}
+    functions["%"] = function(array, y) {return array[0] % array[1];}
+    functions["^"] = function(array, y) {return Math.pow(array[0], array[1]);}
+    functions["cos"] = function(array) {return Math.cos(array[0]);}
+    functions["sin"] = function(array) {return Math.sin(array[0]);}
+    functions["tan"] = function(array) {return Math.tan(array[0]);}
+    functions["sqrt"] = function(array) {return Math.sqrt(array[0]);}
     
     constants = new Object();
     constants["e"] = Math.E;
@@ -117,17 +117,12 @@
     calculator.LinkedList.prototype.add = calculator.LinkedList.prototype.addLast;
     calculator.LinkedList.prototype.remove = calculator.LinkedList.prototype.removeFirst;
 
-
-    /***************
-     * Functions needed globally:
-    ****************/
-    calculator.isFunction = function(character) {
-	return functions[character] !== undefined;
-    };
-
-    calculator.isConstant = function(token) {
-	return constants[token] !== undefined;
-    };
-
+    calculator.simplify = function(equation) {
+	var tokens = tokenizer.tokenize(equation);
+	var rpn = ShuntingYard.toRPN(tokens);
+	var tree = Tree.fromRPN(rpn);
+	tree.evalute();
+	return tree.toPostfix();
+    }
 
 } (window.calculator = window.calculator || {}))

@@ -27,7 +27,7 @@
 	/**
 	 * This function returns the type of the token that it is
 	 * given. Instead of using the OPERATOR value, the function
-	 * returns a value represents the functions priority in order
+	 * returns a value represents the operator's priority in order
 	 * of operations. 1 is the highest priority.
 	 **/
 	var getType = function(item) {
@@ -42,9 +42,9 @@
 	    case "^":
 		return 1;
 	    default:
-		if(calculator.isFunction(item)) {
+		if(isFunction(item)) {
 		    return typeEnum.FUNCTION;
-		} else if(!isNaN(item) || isConstant(item) || isLetter(item)) {
+		} else if(!isNaN(item) || isLetter(item)) {
 		    return typeEnum.NUMBER;
 		} else if(item === ")" || item === "(" || item === ",") {
 		    return typeEnum.SEPARATOR;
