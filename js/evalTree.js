@@ -23,10 +23,43 @@
 	this.children.unshift(data);
     }
 
+    Tree.Node.prototype.isLeaf = function() {
+	return this.children.length === 0;
+    }
+
     Tree.Node.prototype.reduce = function() {
 	
 
 
+    }
+
+    /**
+     * Rough version of converting the tree to infix
+     * notation. Assumes that only operators take two arguments, which
+     * is true at the moment.
+     **/
+    Tree.Node.prototype.toInfix = function() {
+	if(this.isLeaf()) {
+	    return this.data.toString();
+	} else {
+	    var s;
+	    var isOperator = this.children.length == 2
+	    if(!isOperator) {
+		s = this.data + "(";
+	    } else {
+		s = "(";
+	    }
+	    for(var i = 0; i < this.children.length; i++) {
+		if(!isOperator && i !== 0) {
+		    s += ", ";
+		} else if(this.children.length / i == 2) {
+		    s += this.data;
+		}
+		s += this.children[i].toInfix();
+	    }
+	    s += ")";	    
+	    return s;
+	}
     }
     
     Tree.Node.prototype.evaluate = function() {
@@ -67,15 +100,15 @@
 
 	var item = new Tree.Node(tokens.remove());
 	while(item.data !== null) {
-	    if(!isNaN(item.data) || isLetter(item.data)) {
-		stack.push(item);
-	    } else if(functions[item.data] !== undefined) {
+	    if(functions[item.data] !== undefined) {
 		if(stack.size >= functions[item.data].length) {
 		    for(var i = 0; i < functions[item.data].length; i++) {
 			item.addChild(stack.pop());
 		    }
 		    stack.push(item);
 		} else throw "Too many operators";
+	    } else if(!isNaN(item.data) || isLetter(item.data)) {
+		stack.push(item);
 	    } else throw "Unexpected token: " + item;
 	    item = new Tree.Node(tokens.remove());
 	}
@@ -87,10 +120,8 @@
 	}
     }
 
-    Tree.toPostfix = function(tree) {
-	var t = tree.root;
-	
-
+    Tree.prototype.toInfix = function() {
+	return tree.root.toInfix(this.root);
     }
 
 
