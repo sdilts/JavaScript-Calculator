@@ -81,10 +81,10 @@
 			    if(getType(stack.peek()) === typeEnum.FUNCTION) {
 				queue.add(stack.pop());
 			    }
-			} else throw "Mismatched Parenthesis";
+			} else throw new UserException("Mismatched Parenthesis");
 			//deal with commas: (add check here?)
 		    } else if(!popUntil("(")) {
-			throw "Misplaced Comma or Parenthesis";
+			throw new UserException("Misplaced Comma or Parenthesis");
 		    }
 		    break;
 		case typeEnum.FUNCTION:
@@ -102,7 +102,7 @@
 			}
 			stack.push(item);
 		    } else {
-			throw "Unknown token" + item;
+			throw new UserException("Unknown token" + item);
 		    }
 		    break;
 		} //end switch
@@ -111,7 +111,7 @@
 	    
 	    while(stack.peek() !== null) {
 		if(getType(stack.peek()) === typeEnum.SEPARATOR) {
-		    throw "Mismatched Parenthesis";
+		    throw new UserException("Mismatched Parenthesis");
 		} else {
 		    queue.add(stack.pop());
 		}

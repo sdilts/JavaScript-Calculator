@@ -8,9 +8,12 @@
     <script type="text/javascript"> 
       function computeInput() {
 	  try {
-	      alert(document.getElementById("equationInput").value);
+	      document.getElementById("output").innerHTML = 
+		  calculator.simplify(document.getElementById("equationInput").value);
 	  } catch(e) {
-	      alert("ERROR: " + e.message);
+	      
+	      document.getElementById("output").innerHTML = 
+		  "<span class=error>ERROR:</span> " + encodeHTML(e.message);
 	  }
 	  return false;
       }
@@ -24,9 +27,13 @@
       <div id="equationDiv">
 	<form onSubmit="return computeInput()">
 	  <h2>What do you wish to calculate?</h2>
-	  <input id="equationInput" type="text" value="5 + 7 * 4">
+	  <input id="equationInput" type="text" value="(1 + 5) * (8-4-1)">
 	  <input type="submit" id="submitButton" value="Calculate">
 	</form>
+
+	<h3>Answer:</h3>
+	<p id="output">18</p>
+
       </div>
 
       <div id="divTable">

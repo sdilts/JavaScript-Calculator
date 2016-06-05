@@ -164,7 +164,7 @@
 		} else if(character === "(") {
 		    determineProcess(output);
 		    checkNegative();
-		    if((output.size != 0 && isNumber(output.tail.data)) || output.tail.data === ")") {
+		    if(output.size !== 0 && (isNumber(output.tail.data) || output.tail.data === ")")) {
 			output.add("*");
 		    }
 		    output.add(character);
@@ -174,7 +174,7 @@
 		    output.add(character);
 		    index++;
 		    searchIndex++;
-		} else throw "Unkown token: " + character;
+		} else throw new Error("Unkown token: " + character);
 		    
 	    }
 	    return output;

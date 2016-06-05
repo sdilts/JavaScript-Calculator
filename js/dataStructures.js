@@ -1,7 +1,21 @@
 /**
- * This file provides the data structures needed throughout the
- * parsing program, namely the linked list and the tree
+ * This file provides the data structures and functions needed throughout the
+ * parsing program, namely the linked list.
  **/
+function UserException(message) {
+    this.message = message;
+    this.name = "UserException";
+}
+
+function encodeHTML(s) {
+    if(s === undefined) {
+	return "An unknown error occurred";
+    } 
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+}
+
+
+
 
 //use a namespace for all caclulator functions:
 (function (calculator, undefined) {
@@ -118,11 +132,11 @@
     calculator.LinkedList.prototype.remove = calculator.LinkedList.prototype.removeFirst;
 
     calculator.simplify = function(equation) {
-	var tokens = tokenizer.tokenize(equation);
-	var rpn = ShuntingYard.toRPN(tokens);
-	var tree = Tree.fromRPN(rpn);
-	tree.evalute();
-	return tree.toPostfix();
+	var tokens = calculator.tokenizer.tokenize(equation);
+	var rpn = calculator.ShuntingYard.toRPN(tokens);
+	var t = Tree.fromRPN(rpn);
+	t.evaluate();
+	return t.toInfix();
     }
 
 } (window.calculator = window.calculator || {}))

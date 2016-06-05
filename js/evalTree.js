@@ -77,14 +77,14 @@
 		}
 		if(succeed === this.children.length) {
 		    this.data = functions[this.data](array);
-		    this.children = null;
+		    this.children.length = 0;
 		    return this.data;
 		} else return false;
 		
-	    } else throw "wrong number of arguments for \"" + data + "\" operator";
+	    } else throw new UserException("wrong number of arguments for \"" + data + "\" operator");
 	} else if(this.children.length === 0) {
 	    return this.data;
-	} else throw "Something is wrong here";
+	} else throw new UserException( "Something is wrong here");
     }
 
 
@@ -106,14 +106,14 @@
 			item.addChild(stack.pop());
 		    }
 		    stack.push(item);
-		} else throw "Too many operators";
+		} else throw new UserException("Too many operators");
 	    } else if(!isNaN(item.data) || isLetter(item.data)) {
 		stack.push(item);
 	    } else throw "Unexpected token: " + item;
 	    item = new Tree.Node(tokens.remove());
 	}
 	if(stack.size !== 1) {
-	    throw "Error interpreting equation: too few operators?";
+	    throw new UserException( "Error interpreting equation: too few operators?");
 	} else {
 	    //tree.root = stack.pop();
 	    return stack.pop();
